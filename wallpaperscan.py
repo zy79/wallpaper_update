@@ -17,14 +17,17 @@ from os.path import isfile, join
 home = expanduser("~")
 # your own path to save pics
 targetpath = home + '/Desktop/pics/'
-# path where windows put pics
+# path where windows save pics
 sourcepath = home + '/AppData/Local/Packages/Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy/LocalState/Assets/'
 
 # get latest modified date in target parth
 targetfiles = glob.glob(targetpath+'*')
-latestfile = max(targetfiles, key=os.path.getmtime)
-# get time threshold
-timethreshold = os.path.getmtime(latestfile)
+if targetfiles!=[]:
+    latestfile = max(targetfiles, key=os.path.getmtime)
+    # get time threshold
+    timethreshold = os.path.getmtime(latestfile)
+else:
+    timethreshold = os.path.getctime(sourcepath)
 # read in all file names excluding folders
 sourcefiles = [f for f in listdir(sourcepath) if isfile(join(sourcepath, f))]
 # get latest modified date in source, only for files > 200k
@@ -34,3 +37,5 @@ file_list = [x for x in sourcefiles if os.path.getsize(sourcepath+x)>200000 and 
 if file_list != []:
     for file in file_list:
         copyfile(sourcepath+file, targetpath+file+'.jpg')
+
+print(str(len(file_list))+' file copied.')
