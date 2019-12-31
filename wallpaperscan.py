@@ -38,7 +38,7 @@ file_list = [x for x in sourcefiles if os.path.getsize(sourcepath+x)>200000 and 
 if file_list != []:
     for file in file_list:
         # check if image is vertical
-        img = Image.open(file)
+        img = Image.open(sourcepath+file)
         if img.width < img.height:
             copyfile(sourcepath+file, tagetvertical+file+'.jpg')
         else:
